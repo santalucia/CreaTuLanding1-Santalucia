@@ -1,66 +1,83 @@
-import { Box, VStack, Heading, Button, Text } from '@chakra-ui/react';
-import { WiRaindrop } from 'react-icons/wi';
+import { Box, Heading, Button, Text, ButtonGroup, Image, Stack, Divider, SimpleGrid } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-const ItemListContainer = ({greeting, subgreeting, buttonText}) => {
+const ItemCard = ({ product }) => {
+  const navigate = useNavigate();
+
   return (
-    <Box 
-      minH="90vh" 
-      display="flex" 
-      alignItems="center" 
-      justifyContent="center"
-      mx={8}
-      my={8}
+    <Box
+      bg="white"
+      borderRadius="2xl"
+      boxShadow="xl"
+      w="100%"
+      maxW="sm"
+      mx="auto"
+      mb={4}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      minH="400px"
+      p={4}
     >
-      <Box
-        bg="#ECF0F1"
-        borderRadius="3xl"
-        p={20}
-        boxShadow="xl"
-        w="100%"
-        maxW="1200px"
-      >
-        <VStack spacing={6} textAlign="center">
-          <Heading 
-            as="h1" 
-            size="2xl" 
-            color="#0B2545"
-            fontWeight="medium"
-          >
-            {greeting}
-          </Heading>
-          
-          <Heading 
-            as="h2" 
-            size="xl" 
-            color="#0B2545"
-            fontWeight="medium"
-            display="flex"
-            alignItems="center"
-            gap={2}
-          >
-            {subgreeting} <WiRaindrop color="#66E3D9" size={100} />
-          </Heading>
-
+      <Box>
+        <Image
+          src={product.thumbnail}
+          alt='Green double couch with wooden legs'
+          borderRadius='lg'
+          mx="auto"
+        />
+        <Stack mt='6' spacing='3'>
+          <Heading size='md' noOfLines={1} color="#0B2545">{product.title}</Heading>
+          <Text>
+            {product.description}
+          </Text>
+          <Text color="#0B2545" fontSize='2xl'>
+            ${product.price}
+          </Text>
+        </Stack>
+      </Box>
+      <Divider my={4} />
+      <Box>
+        <ButtonGroup spacing='2'>
           <Button
             bg="#E76F51"
             color="white"
-            fontSize="2xl"
-            px={16}
-            py={8}
+            _hover={{ bg: '#E76F51', opacity: 0.8, transform: 'scale(1.04)', transition: 'all 0.2s' }}
             borderRadius="3xl"
-            _hover={{ 
-              bg: '#E76F51', 
-              opacity: 0.8,
-              transform: 'scale(1.02)',
-              transition: 'all 0.2s ease-in-out'
-            }}
-            boxShadow="sm"
             fontWeight="normal"
+            onClick={() => navigate(`/productos/${product.id}`)}
           >
-            {buttonText}
+            Ver detalle
           </Button>
-        </VStack>
+        </ButtonGroup>
       </Box>
+    </Box>
+  );
+};
+
+const ItemListContainer = ({ products }) => {
+
+
+
+
+  return (
+    <Box
+      w="100%"
+      maxW="1200px"
+      mx="auto"
+      px={4}
+      py={8}
+      overflow="visible"
+    >
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+        spacing={6}
+        overflow="visible"
+      >
+        {products.map((product) => (
+          <ItemCard key={product.id} product={product} />
+        ))}
+      </SimpleGrid>
     </Box>
   );
 };
