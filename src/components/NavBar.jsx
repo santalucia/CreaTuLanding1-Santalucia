@@ -1,24 +1,17 @@
-import { useState, useEffect } from 'react';
-import { getAllCategories } from '../services/products.service';
-import { Box, Flex, Text, HStack, Link, Container, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import { WiRaindrop } from 'react-icons/wi';
-import CardWidget from './CardWidget';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { WiRaindrop } from 'react-icons/wi';
+
+import { Box, Flex, Text, HStack, Link, Container, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
+
+import CartWidget from './CardWidget';
+import { useGetFirestoreDocs } from '../hooks/useGetFirestoreDocs';
+
 const NavBar = () => {
-  const [categories, setCategories] = useState([]); 
+  const { items, isLoading } = useGetFirestoreDocs("categories"); 
   const [activeLink, setActiveLink] = useState('productos');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getAllCategories()
-      .then((categories) => {
-        setCategories(categories.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   return (
     <Box bg="#0B2545" py={4} color="white">
@@ -54,15 +47,15 @@ const NavBar = () => {
                   Categorías
                 </MenuButton>
                 <MenuList bg="#0B2545" borderColor="whiteAlpha.300" zIndex={3000} maxH="300px" overflowY="auto">
-                  {categories.map((category) => (
+                  {items.map((category) => (
                     <MenuItem
-                      key={category.slug}
+                      key={category?.slug}
                       bg="transparent"
                       color="white"
                       _hover={{ bg: 'whiteAlpha.200', color: '#66E3D9' }}
-                      onClick={() => navigate(`/categorias/${category.slug}`)}
+                      onClick={() => navigate(`/categorias/${category?.slug}`)}
                     >
-                      {category.name}
+                      {category?.name}
                     </MenuItem>
                   ))}
                 </MenuList>
@@ -71,7 +64,7 @@ const NavBar = () => {
           </Flex>
 
           <Box>
-            <CardWidget />
+            <CartWidget />
           </Box>
         </Flex>
       </Container>

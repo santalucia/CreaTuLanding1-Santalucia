@@ -1,25 +1,11 @@
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ItemDetailContainer from '../components/ItemDetailContainer';
-import { getProductById } from '../services/products.service';
 import { Box, Spinner } from '@chakra-ui/react';
+import { useGetItemFirestore } from '../hooks/useGetItemFirestore';
 
 const Item = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        getProductById(id)
-            .then((product) => {
-                setProduct(product.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, []);
+    const { item, isLoading } = useGetItemFirestore(id, "products");        
 
     return (
         isLoading ?
@@ -40,7 +26,7 @@ const Item = () => {
                 />
             </Box>
             :
-            <ItemDetailContainer product={product} />
+            <ItemDetailContainer product={item} />
     )
 }
 

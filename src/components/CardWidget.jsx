@@ -1,7 +1,13 @@
+import { useContext } from 'react';
 import { Menu, MenuButton, MenuList, MenuItem, IconButton, Flex, Circle } from '@chakra-ui/react';
 import { BsCart3 } from 'react-icons/bs';
+import { CartContext } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
-const CardWidget = () => {
+const CartWidget = () => {
+  const { cart } = useContext(CartContext);
+  const navigate = useNavigate();
+
   return (
     <Menu>
       <Flex align="center">
@@ -23,7 +29,7 @@ const CardWidget = () => {
           ml="-2"
           mt="-3"
         >
-          5
+          {cart.length}
         </Circle>
       </Flex>
       <MenuList bg='#0B2545' borderColor='whiteAlpha.300'>
@@ -32,6 +38,7 @@ const CardWidget = () => {
           _hover={{ bg: 'whiteAlpha.200', color: '#66E3D9' }}
           _focus={{ bg: 'whiteAlpha.200' }}
           color='white'
+          onClick={() => navigate('/cart')}
         >
           Ver carrito
         </MenuItem>
@@ -40,6 +47,7 @@ const CardWidget = () => {
           _hover={{ bg: 'whiteAlpha.200', color: '#66E3D9' }}
           _focus={{ bg: 'whiteAlpha.200' }}
           color='white'
+          onClick={() => navigate('/checkout')}
         >
           Finalizar compra
         </MenuItem>
@@ -48,5 +56,5 @@ const CardWidget = () => {
   );
 };
 
-export default CardWidget;
+export default CartWidget;
 

@@ -1,7 +1,10 @@
 import { Box, Heading, Button, Text, ButtonGroup, Image, Stack, Divider, SimpleGrid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 
 const ItemCard = ({ product }) => {
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   return (
@@ -21,18 +24,18 @@ const ItemCard = ({ product }) => {
     >
       <Box>
         <Image
-          src={product.thumbnail}
+          src={product?.thumbnail}
           alt='Green double couch with wooden legs'
           borderRadius='lg'
           mx="auto"
         />
         <Stack mt='6' spacing='3'>
-          <Heading size='md' noOfLines={1} color="#0B2545">{product.title}</Heading>
+          <Heading size='md' noOfLines={1} color="#0B2545">{product?.title}</Heading>
           <Text>
-            {product.description}
+            {product?.description}
           </Text>
           <Text color="#0B2545" fontSize='2xl'>
-            ${product.price}
+            ${product?.price}
           </Text>
         </Stack>
       </Box>
@@ -45,9 +48,20 @@ const ItemCard = ({ product }) => {
             _hover={{ bg: '#E76F51', opacity: 0.8, transform: 'scale(1.04)', transition: 'all 0.2s' }}
             borderRadius="3xl"
             fontWeight="normal"
-            onClick={() => navigate(`/productos/${product.id}`)}
+            onClick={() => navigate(`/productos/${product?.id}`)}
           >
             Ver detalle
+          </Button>
+
+          <Button
+            bg="#E76F51"
+            color="white"
+            _hover={{ bg: '#E76F51', opacity: 0.8, transform: 'scale(1.04)', transition: 'all 0.2s' }}
+            borderRadius="3xl"
+            fontWeight="normal"
+            onClick={() => addToCart(product)}
+          >
+            Agregar item
           </Button>
         </ButtonGroup>
       </Box>
@@ -56,10 +70,6 @@ const ItemCard = ({ product }) => {
 };
 
 const ItemListContainer = ({ products }) => {
-
-
-
-
   return (
     <Box
       w="100%"

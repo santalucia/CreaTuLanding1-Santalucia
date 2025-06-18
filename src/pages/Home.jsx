@@ -1,31 +1,19 @@
-import { useState, useEffect } from 'react';
 import { Box, Spinner } from '@chakra-ui/react';
 import ItemListContainer from '../components/ItemListContainer';
-import { getAllProducts } from '../services/products.service';
+import { useGetFirestoreDocs } from '../hooks/useGetFirestoreDocs';
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { items, isLoading } = useGetFirestoreDocs("products");
 
-  useEffect(() => {
-    getAllProducts()
-    .then((products) => {
-      setProducts(products.data.products);
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-  }, []);
-
-    return (
-      isLoading ?
-      <Box 
-        display="flex" 
-        alignItems="center" 
+  return (
+    isLoading ?
+      <Box
+        display="flex"
+        alignItems="center"
         justifyContent="center"
         minH="calc(100vh - 80px)"
       >
-        <Spinner 
+        <Spinner
           thickness="4px"
           speed="0.65s"
           emptyColor="gray.200"
@@ -37,9 +25,9 @@ const Home = () => {
       </Box>
       :
       <Box>
-        <ItemListContainer products={products} />
+        <ItemListContainer products={items} />
       </Box>
-    )   
+  )
 };
 
 export default Home;

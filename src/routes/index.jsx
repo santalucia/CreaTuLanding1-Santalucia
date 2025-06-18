@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../pages/Home';
 import MainLayout from '../layouts/MainLayouts';
-import ItemListContainer from '../components/ItemListContainer';
 import Item from '../pages/Item';
 import Category from '../pages/Category';
 import NotFound from '../pages/NotFound';
+import Cart from '../pages/Cart';
+import Checkout from '../pages/Checkout';
 
 const routes = [
     {
@@ -22,6 +23,14 @@ const routes = [
             {
                 path: '/categorias/:id',
                 element: <Category />,
+            },
+            {
+                path: '/cart',
+                element: <Cart />,
+            },
+            {
+                path: '/checkout',
+                element: <Checkout />,
             },
             {
                 path: "*",

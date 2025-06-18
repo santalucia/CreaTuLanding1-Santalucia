@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProductsByCategory } from '../services/products.service';
 import { Box, Spinner } from '@chakra-ui/react';
 import ItemListContainer from '../components/ItemListContainer';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../services/config/firebase';
 
 const Category = () => {
     const { id } = useParams();
@@ -10,14 +11,14 @@ const Category = () => {
     const [isLoading, setIsLoading] = useState(true);
     
     useEffect(() => {
-        getProductsByCategory(id)
-            .then((products) => {
-                setProducts(products.data.products);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, [products]);     
+        const productsQuery = query(collection(db, "products"), where("category", "==", id));
+        
+        getDocs(productsQuery).then((snapshot) => {
+            const products = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+            setProducts(products);
+            setIsLoading(false);
+        });
+    }, [id]);     
     return (
         <>
             {isLoading ? (
